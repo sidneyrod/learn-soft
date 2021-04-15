@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.sid.learnsoft.services.exceptions.DatabaseException;
+import com.sid.learnsoft.services.exceptions.ForbiddenException;
 import com.sid.learnsoft.services.exceptions.ResourceNotFoundException;
+import com.sid.learnsoft.services.exceptions.UnauthorizedException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -67,6 +69,24 @@ public class ResourceExceptionHandler {
 		err.setError("Bad request");
 		err.setMessage(e.getMessage());
 		err.setPath(request.getRequestURI());		
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(ForbiddenException.class)
+	public ResponseEntity<OAuthCustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.FORBIDDEN;
+		OAuthCustomError err = new OAuthCustomError();
+		err.setError("Forbidden");
+		err.setErrorDescription(e.getMessage());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<OAuthCustomError> unauthorized(UnauthorizedException e, HttpServletRequest request) {
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+		OAuthCustomError err = new OAuthCustomError();
+		err.setError("Unauthorized");
+		err.setErrorDescription(e.getMessage());
 		return ResponseEntity.status(status).body(err);
 	}
 }
