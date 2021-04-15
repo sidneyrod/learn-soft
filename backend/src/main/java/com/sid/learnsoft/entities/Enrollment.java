@@ -29,6 +29,7 @@ public class Enrollment implements Serializable {
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant refundMoment;
+	
 	private boolean available;
 	private boolean onlyUpdate;
 	
